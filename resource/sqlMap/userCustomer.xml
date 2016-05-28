@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserCustomer">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.UserCustomer" useGeneratedKeys="true" keyProperty="userCustomerId">
+		INSERT INTO t_user_customer
+		(
+		  	CUSTOMER_ID,
+			USER_ID
+		)
+		VALUES
+		(
+			#{customerId},
+			#{userId}			
+		)
+	</insert>
+	
+	
+</mapper>

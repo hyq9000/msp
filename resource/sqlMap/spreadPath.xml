@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SpreadPath">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.SpreadPath" useGeneratedKeys="true" keyProperty="pathId">
+		INSERT INTO t_spread_path
+		(
+		   SPREAD_CID,
+		   READER_CID,
+		   USER_CONTENT_ID,
+		   CLUE_ID,
+		   SPREAD_NICK,
+		   READER_NICK,
+		   CONTENT_TITLE,
+		   SPREAD_DEEP,
+		   SPREAD_TYPE
+		)
+		VALUES
+		(
+			#{spreadCid},
+			#{readerCid},
+			#{userContentId},
+			#{clueId},
+			#{spreadNick},
+			#{readerNick},
+			#{contentTitle},
+			#{spreadDeep},
+			#{spreadType}
+		)
+	</insert>
+	
+	<select id="hasSame" parameterType="map" resultType="map">
+		SELECT PATH_ID, SPREAD_TYPE FROM t_spread_path WHERE SPREAD_CID=#{spreadCid} 
+		AND READER_CID=#{readerCid}
+		AND USER_CONTENT_ID=#{userContentId} 
+		AND SPREAD_DEEP=#{spreadDeep}
+		<!--  AND SPREAD_TYPE=#{spreadType}-->
+	</select>
+	
+	<update id="updateSpreadType" parameterType="long">		
+		UPDATE t_spread_path SET  SPREAD_TYPE=1 WHERE PATH_ID=#{0}
+	</update>
+	
+	<select id="getDeep" parameterType="map" resultType="map">
+		SELECT SPREAD_DEEP as spreadDeep FROM t_spread_path WHERE SPREAD_CID=#{spreadCid} 
+		AND USER_CONTENT_ID=#{userContentId}
+		AND SPREAD_TYPE=1
+	</select>
+	
+	
+	<select id="getContentRelation" parameterType="long" resultType="map">			
+		SELECT PATH_ID,SPREAD_CID,READER_CID,READER_NICK,CUSTOMER_HEAD AS READER_HEAD
+			FROM t_customer,t_spread_path 
+			WHERE USER_CONTENT_ID=#{0} AND reader_CID=CUSTOMER_ID 
+			ORDER BY spread_deep,SPREAD_TYPE DESC
+			
+	</select>
+	
+</mapper>

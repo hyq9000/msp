@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Tag">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.Tag" useGeneratedKeys="true" keyProperty="clueId">
+		INSERT INTO t_tag(
+			TAG_ID,
+			TAG_PARENT_ID,
+			TAG_TYPE,
+			TAG_NAME,
+			TAG_DESCRIPT
+		) VALUES(
+			#{tagParentId},
+			#{tagType},
+			#{tagName},
+			#{tagDescript}
+		)
+	</insert>
+	
+	
+	
+</mapper>

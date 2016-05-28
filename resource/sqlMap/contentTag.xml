@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ContentTag">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.ContentTag" useGeneratedKeys="true" keyProperty="contentTagId">
+		INSERT INTO t_clue
+		(
+		   CLUE_ID,
+		   USER_CONTENT_ID,
+		   CLUE_TIME,
+		   CLUE_APP_ID,
+		   CLUE_OPENID,
+		   CLUE_CONTENT_TITLE,
+		   CLUE_TYPE,
+		   CLUE_POSITION,
+		   CLUE_POSITION_NAME
+		)
+		VALUES
+		(
+			#{clueId},
+			#{userContentId},
+			#{clueTime},
+			#{clueAppId},
+			#{clueOpenId},
+			#{clueContentTitle},
+			#{clueType},
+			#{cluePosition},
+			#{cluePositionName}
+		)
+		
+	</insert>
+	<select id="getContentTags" parameterType="long" resultType="com.mmm.clouds.model.ContentTag">
+		SELECT TAG_ID as tagId,CONTENT_OUTLINE_ID as contentOutlineId,TAG_NAME as tagName FROM t_content_tag WHERE CONTENT_OUTLINE_ID=#{0}
+	</select>
+	
+</mapper>

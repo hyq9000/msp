@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CustomerTag">	
+	<insert id="addCustomerTag" parameterType="com.mmm.clouds.model.CustomerTag" useGeneratedKeys="true" keyProperty="customerTagId">
+		INSERT INTO T_CUSTOMER_TAG
+		(
+   		   TAG_ID,
+		   CUSTOMER_ID,
+		   TAG_NAME  
+		)
+		VALUES
+		<foreach collection="list" item="tag" separator=",">
+		(
+			#{tag.tagId},
+			#{customerId},
+			#{tag.tagName}
+		)
+		</foreach>
+	</insert>
+	
+	<select id="hasSome" parameterType="map" resultType="map">
+		SELECT  TAG_ID as tagId FROM t_customer_tag WHERE CUSTOMER_ID=#{customerId} and TAG_ID in (${tagIdStr})
+	</select>
+	
+	
+</mapper>

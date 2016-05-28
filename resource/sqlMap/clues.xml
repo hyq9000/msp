@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Clue">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.Clue" useGeneratedKeys="true" keyProperty="clueId">
+		INSERT INTO t_clue
+		(
+		   USER_CONTENT_ID,
+		   CLUE_TIME,
+		   CLUE_APP_ID,
+		   CLUE_OPENID,
+		   CLUE_CONTENT_TITLE,
+		   CLUE_TYPE,
+		   CLUE_POSITION,
+		   CLUE_POSITION_NAME
+		)
+		VALUES
+		(
+			#{userContentId},
+			CURRENT_TIMESTAMP,
+			#{clueAppId},
+			#{clueOpenid},
+			#{clueContentTitle},
+			#{clueType},
+			#{cluePosition},
+			#{cluePositionName}
+		)
+	</insert>
+	
+	
+</mapper>

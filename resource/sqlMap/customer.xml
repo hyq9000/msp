@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="Customer">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.Customer" useGeneratedKeys="true" keyProperty="customerId">
+		INSERT INTO T_CUSTOMER
+		(
+		   WX_APP_ID,
+		   WX_OPENID,
+		   CUSTOMER_NICK,
+		   CUSTOMER_SEX,
+		   CUSTOMER_PROVINCY,
+		   CUSTOMER_CITY,
+		   CUSTOMER_COUNTRY,
+		   CUSTOMER_HEAD,
+		   CUSTOMER_RPIVILEGE
+		)
+		VALUES
+		
+		(
+			#{wxAppId},
+			#{wxOpenid},
+			#{customerNick},
+			#{customerSex},
+			#{customerProvincy},
+			#{customerCity},
+			#{customerCountry},
+			#{customerHead},
+			#{customerPrivilege}
+		)
+	</insert>
+	
+	<select id="hasOne" resultType="map" parameterType="map">
+		select CUSTOMER_ID as customerId  from T_CUSTOMER where WX_APP_ID=#{appId} and  
+		WX_OPENID=#{openid}
+	</select>
+	<select id="getNickById" resultType="map" parameterType="int">
+		select CUSTOMER_NICK as customerNick from T_CUSTOMER where CUSTOMER_ID=#{0}
+	</select>
+	
+</mapper>

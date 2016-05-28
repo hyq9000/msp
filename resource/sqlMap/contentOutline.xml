@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ContentOutline">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.ContentOutline" useGeneratedKeys="true" keyProperty="contentOutlineId">
+		INSERT INTO t_content_outline
+		(		  
+			CONTENT_ID,
+			CONTENT_OUTLINE_AUTHOR,
+			CONTENT_OUTLINE_TYPE,
+			CONTENT_OUTLINE_TITLE,
+			CONTENT_OUTLINE_HEAD,
+			CONTENT_LINK
+		)
+		VALUES
+		(
+			#{contentId},
+			#{contentOutlineAuthor},
+			#{contentOutlineType},
+			#{contentOutlineTitle},
+			#{contentOutlineHead},
+			#{contentLink}		
+		)
+	</insert>
+	
+	<update id="updateStatisticValue" parameterType="map" >
+		UPDATE t_content_outline SET
+		<if test="type==0">
+			CONTENT_OUTLINE_RCOUNT=CONTENT_OUTLINE_RCOUNT+1 
+		</if>
+		<if test="type==1">
+			CONTENT_OUTLINE_SCOUNT=CONTENT_OUTLINE_SCOUNT+1 
+		</if>
+		WHERE CONTENT_OUTLINE_ID=#{contentOutlineId}
+	</update>
+	
+	<select id="getById" parameterType="map" resultType="com.mmm.clouds.model.ContentOutline">
+		select 
+			CONTENT_OUTLINE_ID as contentOutlineId,
+			CONTENT_ID as contentId,
+			CONTENT_OUTLINE_TYPE as contentOutlineType,
+			CONTENT_OUTLINE_TITLE as contentOutlineTitle,
+			CONTENT_OUTLINE_HEAD as contentOutlineHead,
+			CONTENT_LINK as contenLink,
+			CONTENT_OUTLINE_TIME as contentOutlineTime,
+			CONTENT_OUTLINE_RCOUNT as contentOutlineRcount,
+			CONTENT_OUTLINE_SCOUNT as contentOutlineScount,
+			CONTENT_OUTLINE_AUTHOR AS contentOutlineaAuthor
+			from T_CONTENT_OUTLINE
+		where 
+			CONTENT_OUTLINE_ID =#{0}
+	</select>
+	
+	
+	
+	
+</mapper>

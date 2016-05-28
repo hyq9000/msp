@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserContent">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.UserContent" useGeneratedKeys="true" keyProperty="userContentId">
+		INSERT INTO T_USER_CONTENT
+		(
+   			USER_ID,
+   			CONTENT_OUTLINE_ID ,
+   			CONTENT_OUTLINE_AURL ,
+   			USER_CONTENT_READ_COUNT,
+		    USER_CONTENT_SPREAD_COUNT ,
+		    CONTENT_OUTLINE_TITLE
+		)
+		VALUES
+		(
+			#{userId},
+			#{contentOutlineId},
+			#{contentOutlineAurl},
+			#{userContentReadCount},
+			#{userContentSpreadCount},
+			#{contentOutlineTitle}
+		)
+	</insert>
+	
+	<select id="getById" parameterType="long" resultType="com.mmm.clouds.model.UserContent">
+		select USER_CONTENT_ID as userContentId,USER_ID as userId,
+		CONTENT_OUTLINE_ID as contentOutlineId,CONTENT_OUTLINE_TITLE as contentOutlineTitle,
+		CONTENT_OUTLINE_AURL contentOutlineAurl,USER_CONTENT_READ_COUNT as userContentReadCount,
+		USER_CONTENT_SPREAD_COUNT as userContentSpreadCount FROM T_USER_CONTENT
+		where USER_CONTENT_ID=#{userContentId}
+	</select>
+	
+	<update id="updateStatisticValue" parameterType="map" >
+		UPDATE t_user_content SET
+		<if test="type==0">
+			USER_CONTENT_READ_COUNT=USER_CONTENT_READ_COUNT+1 
+		</if>
+		<if test="type==1">
+			USER_CONTENT_SPREAD_COUNT=USER_CONTENT_SPREAD_COUNT+1 
+		</if>
+		WHERE USER_CONTENT_ID=#{userContentId}
+	</update>
+	
+	<update id="updateAccessUrl" parameterType="map" >
+		UPDATE t_user_content SET CONTENT_OUTLINE_AURL=#{accessUrl}
+		WHERE USER_CONTENT_ID=#{userContentId}
+	</update>
+	
+	<select id="hasSame" parameterType="map" resultType="map">
+		select USER_CONTENT_ID from T_USER_CONTENT 
+		WHERE USER_ID=#{userId} and CONTENT_OUTLINE_ID=#{contentOutlineId}
+	</select>
+	
+	
+</mapper>

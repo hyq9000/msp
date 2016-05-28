@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="User">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.User" useGeneratedKeys="true" keyProperty="userId">
+		INSERT INTO t_user
+		(
+		   ENTERPRISE_ID,
+		   USER_LOGIN_NAME,
+		   USER_NAME,
+		   USER_PASSWORD,
+		   USER_STATUS
+		)
+		VALUES
+		(		
+			#{enterpriseId},
+			#{userLoginName},
+			#{userName},
+			#{userPassword},
+			#{userStatus}
+		)
+	</insert>
+	
+	<select id="login" parameterType="map" resultType="com.mmm.clouds.model.User">
+		SELECT 
+			USER_ID AS userId,
+			ENTERPRISE_ID AS enterpriseId,
+			USER_LOGIN_NAME AS userLoginName,
+			USER_NAME AS userName,
+			USER_PASSWORD as userPassword,
+			USER_STATUS userStatus
+		FROM  t_user
+		WHERE USER_LOGIN_NAME=#{userName} AND USER_PASSWORD=#{password}
+	</select>
+	
+	
+</mapper>

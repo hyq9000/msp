@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CustomerRelation">	
+	<insert id="insert" parameterType="com.mmm.clouds.model.CustomerRelation" useGeneratedKeys="true" keyProperty="crId">
+		INSERT INTO t_customer_relation
+		(
+		   	CUSTOMER_ID1,
+			CUSTOMER_ID2,
+			CR_RELATION
+		)
+		VALUES
+		(
+			#{customerId1},
+			#{customerId2},
+			#{crRelation}
+		)
+	</insert>
+	
+	
+</mapper>
