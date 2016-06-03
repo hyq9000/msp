@@ -15,6 +15,13 @@
 			#{crRelation}
 		)
 	</insert>
-	
+	<select id="hasOne" parameterType="map" resultType="int">
+		select 
+			CR_ID from t_customer_relation 
+		where 
+			(CUSTOMER_ID1=#{c1} and CUSTOMER_ID2=#{c2})
+			or 
+			(CUSTOMER_ID1=#{c2} and CUSTOMER_ID2=#{c1})			
+	</select>
 	
 </mapper>

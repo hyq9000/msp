@@ -9,8 +9,11 @@ public interface CustomerService extends EntityService<Customer>{
 	 * 1，新加一行客户信息入库
 	 * 2，写客户关系表,
 	 * 3，写用户与客户关系表
+	 * @param customer 当前阅读者客户对象，
+	 * @param spreadCustomerId 传播者客户ID
+	 * @param userId 用户ID 
 	 */
-	void addCustomer(Customer customer,long relationCustomerId,int userId) throws Exception;
+	void addCustomer(Customer customer,long spreadCustomerId,int userId) throws Exception;
 	
 	/**
 	 * 查取指定ID的客户昵称

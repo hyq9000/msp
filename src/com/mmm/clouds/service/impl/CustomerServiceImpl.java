@@ -23,14 +23,14 @@ public class CustomerServiceImpl extends DaoMybatisImpl<Customer> implements Cus
 	@Autowired UserCustomerService userCustomerService;
 	
 	@Override	
-	public void addCustomer(Customer customer,long relationCustomerId,int userId) throws Exception {
+	public void addCustomer(Customer customer,long spreadCustomerId,int userId) throws Exception {
 		Map<String,Object> rs=(Map<String,Object>)this.executeQueryOne("hasOne", WebUtils.generateMapData(
 				new String[]{"appId", "openid"},
 				new Object[]{customer.getWxAppId(),customer.getWxOpenid()}));
 		
 		if(rs!=null){
 			ExceptionLogger.writeLog(customer.getWxAppId()+":"+customer.getWxOpenid()+"该客户信息已经存在!"+rs.get("customerId"));
-			customer.setCustomerId((Long)rs.get("customerId"));
+			customer.setCustomerId((Long)rs.get("customerId")); 
 		}else{
 			ExceptionLogger.writeLog(customer.getWxAppId()+":"+customer.getWxOpenid()+"该客户信息不存在!"+rs);
 			//1，新加一行客户信息入库
@@ -44,17 +44,14 @@ public class CustomerServiceImpl extends DaoMybatisImpl<Customer> implements Cus
 		 *   c，转发者及阅读者关系不存在 
 		 */
 		
-		if(relationCustomerId>0 && relationCustomerId!=customer.getCustomerId() ){
+		if(spreadCustomerId>0 
+				&& spreadCustomerId!=customer.getCustomerId()
+				&& customerRelationService.hasOne(spreadCustomerId,customer.getCustomerId())){
 			CustomerRelation cr=new CustomerRelation();
 			cr.setCrRelation("朋友圈");			
-			cr.setCustomerId1(relationCustomerId);
-			cr.setCustomerId2(customer.getCustomerId());
-			//如果保存时，报1062错误，说明转发者及阅读者关系已存在 ，忽略即可
-			try {
-				customerRelationService.add(cr);
-			} catch (DuplicateKeyException e) {
-				ExceptionLogger.writeLog("----------------------------客户关系已经存在:"+e);
-			}
+			cr.setCustomerId1(spreadCustomerId);
+			cr.setCustomerId2(customer.getCustomerId());			
+			customerRelationService.add(cr);			
 		}
 		
 		//3，否写用户与客户关系表
