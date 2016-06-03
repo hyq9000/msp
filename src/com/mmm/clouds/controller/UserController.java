@@ -12,6 +12,7 @@ import com.common.utils.AESOperator;
 import com.common.web.WebUtils;
 import com.mmm.clouds.model.User;
 import com.mmm.clouds.service.UserService;
+import com.mmm.clouds.utils.UserUtils;
 
 @Controller
 @RequestMapping("/user")
@@ -30,10 +31,7 @@ public class UserController extends SuperController {
 	public String login(String name,String pwd) throws Exception{
 		User user=userService.login(name, pwd);
 		if(user!=null){
-			String userIdStr=AESOperator.encrypt(user.getUserId()+"");
-			Map<String,Object> userInfo=WebUtils.generateMapData(
-					new String[]{"userName","userId"}, new Object[]{user.getUserName(),userIdStr});
-			cache.put(userIdStr,userInfo,3600*24*7);
+			Map<String,Object> userInfo=UserUtils.saveUserToCache(user, cache);
 			return WebUtils.responseData(userInfo);
 		}else
 			return WebUtils.responseError("用户名或密码不正确!",-1);

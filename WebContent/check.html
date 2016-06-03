@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	  <div id="main" style="height:400px"></div>
+	<div id="main" style="height:400px"></div>
+	  
 	<script src="/resources/js/jquery-1.11.1.min.js"></script>
 	<script src="/resources/js/common.js"></script>
 	<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
-	<script>
-		
+	<script>		
 		var parameters=parseUrlParameter(location.href);
 	
         // 路径配置
@@ -52,10 +53,10 @@
 						series : [ {
 							name : '脉络树图',
 							type : 'tree',
-							orient : 'vertical', // vertical horizontal
+							orient : 'horizontal', // vertical horizontal
 							rootLocation : {
-								x : 'center',
-								y : 50
+								x : 50,
+								y : 'center'
 							}, // 根节点位置  {x: 'center',y: 10}
 							nodePadding : 10,
 							layerPadding:30,
@@ -92,8 +93,7 @@
 					// 为echarts对象加载数据 
 	                myChart.setOption(option); 
 				});
-		});
-		
+		});		
 		
 	//});
 	</script>

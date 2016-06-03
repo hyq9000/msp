@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="/resources/js/simditor-2.3.6/styles/simditor.css" />
+</head>
+<body>
+	<input id="title"/>
+	<textarea id="editor" placeholder="Balabala" autofocus>
+	</textarea>
+	<input type="button" value="保存内容" id="submit">
+	<input type="button" value="生成发布二维码" id="prePublish">
+	<div id="qrcode"></div>
+	
+<script type="text/javascript" src="/resources/js/simditor-2.3.6/scripts/jquery.min.js"></script>
+<script type="text/javascript" src="/resources/js/jquery.qrcode.min.js"></script> 	
+<script type="text/javascript" src="/resources/js/simditor-2.3.6/scripts/module.js"></script>
+<script type="text/javascript" src="/resources/js/simditor-2.3.6/scripts/uploader.js"></script>
+<script type="text/javascript" src="/resources/js/simditor-2.3.6/scripts/hotkeys.js"></script>
+<script type="text/javascript" src="/resources/js/simditor-2.3.6/scripts/simditor.js"></script>
+<script type="text/javascript">
+
+(function(){
+	var contentOutlinId;
+	var url;
+	var editor = new Simditor({
+	  textarea: $('#editor'),
+	  pasteImage:true,
+	  upload:true,
+	  toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent', 'alignment'],
+	});
+	
+	$("#submit").click(function(){
+		var contentValue=editor.getValue();
+		$.post("/v1.0/content/save",{
+			userIdStr:'v7R4bcIk7N9D4ci5/aRU5A==',
+			title:$("#title").val(),
+			type:0,
+			head:"http://h.hiphotos.baidu.com/image/h%3D200/sign=2c25a153d658ccbf04bcb23a29dabcd4/962bd40735fae6cde472a38008b30f2443a70f08.jpg",
+			link:"",
+			text:contentValue
+		},function(dataStr){
+			var data=eval("("+dataStr+")");
+			contentOutlinId=data.data;
+			alert("用户内容"+contentOutlinId+"保存成功");
+		});
+	});
+
+	//预发布，并生成二维码；	
+	$("#prePublish").click(function(){
+		$.post("/v1.0/content/prePublish",{
+			//TODO 用户登陆时 ，应保存到cookes;
+			userIdStr:'v7R4bcIk7N9D4ci5/aRU5A==',
+			contentOutlineId:contentOutlinId			
+		},function(dataStr){
+			var data=eval("("+dataStr+")");
+			var userContentId=data.data;
+			
+			$.post("/v1.0/wx/packUrl",{
+				userContentId:userContentId,
+				spreadCid:-1,
+				spreadNick:'',
+				spreadDeep:0		
+			},function(dataStr){				
+				var data=eval("("+dataStr+")");
+				url=data.data;
+				$("#qrcode").qrcode({ 
+				    render: "table", //table方式 
+				    width: 200, //宽度 
+				    height:200, //高度 
+				    text: url //任意内容 
+				}); 
+			});
+			
+		});
+	});
+})();
+</script>	
+</body>
+</html>

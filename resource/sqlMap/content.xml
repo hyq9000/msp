@@ -4,5 +4,7 @@
 	<insert id="insert" parameterType="com.mmm.clouds.model.Content" useGeneratedKeys="true" keyProperty="contentId">
 		INSERT INTO t_content(CONTENT_TEXT) VALUES(#{contentText})
 	</insert>	
-	
+	<select id="getById" parameterType="long" resultType="com.mmm.clouds.model.Content">
+		select CONTENT_ID as contentId,CONTENT_TEXT as contentText from t_content where CONTENT_ID=#{0}
+	</select>
 </mapper>

@@ -17,6 +17,7 @@ import com.mmm.clouds.model.Content;
 import com.mmm.clouds.model.ContentOutline;
 import com.mmm.clouds.model.UserContent;
 import com.mmm.clouds.service.ContentOutlineService;
+import com.mmm.clouds.service.ContentService;
 import com.mmm.clouds.service.UserContentService;
 import com.mmm.clouds.service.impl.WxServiceImpl;
 import com.mmm.clouds.utils.StaticResourceGenerator;
@@ -34,6 +35,7 @@ public class ContentController extends SuperController {
 	@Autowired private ContentOutlineService contentOutlineService;
 	@Autowired private UserContentService userContentService;
 	@Autowired private StaticResourceGenerator sg;
+	@Autowired private ContentService contentService;
 	/**
 	 * 保存内容,生成内容及内容纲要表数据
 	 * @param titl 内容标题
@@ -76,7 +78,7 @@ public class ContentController extends SuperController {
 	    
 		WxServiceImpl.WxInfo wxInfo=wxService.getWxConfigInformation(userId);
 		ContentOutline contentOutline=contentOutlineService.getById(contentOutlineId);
-		
+		Content content=contentService.getById(contentOutline.getContentId());
 		//先获得预发布的文件名;
 		
 		String fname=sg.generateFileName();
@@ -100,12 +102,22 @@ public class ContentController extends SuperController {
 				contentOutlineHead=contentOutline.getContentOutlineHead(),
 				webHome="http://"+super.host+":"+super.port+super.context;		
 		Map data=WebUtils.generateMapData(
-				new String[]{"appId","contentOutlineTitle",
+				new String[]{
+						//微信JS接口相妆
+						"appId","contentOutlineTitle",
 						"contentOutlineId","nonceStr",
-						"contentOutlineHead","webHome"},
+						"contentOutlineHead","webHome",
+						//文章内容相关
+						"title","content"
+				},
 				new Object[]{appId,contentOutlineTitle,
 						contentOutlineId,nonceStr,
-						contentOutlineHead,webHome});
+						contentOutlineHead,webHome,
+						
+						//文章内容相关
+						contentOutline.getContentOutlineTitle(),
+						content.getContentText()
+				});
 		//生成静态的内容页面，并返回URL
 		String accessUrl= sg.article2html(templateFile, data,fname);
 	
@@ -116,7 +128,7 @@ public class ContentController extends SuperController {
 		
 		
 		//响应请求
-		return WebUtils.responseData(accessUrl);
+		return WebUtils.responseData(uc.getUserContentId());
 	}
 	
 	/**

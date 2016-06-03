@@ -29,6 +29,7 @@ import com.mmm.clouds.service.UserContentService;
 import com.mmm.clouds.service.impl.SpreadPathServiceImpl;
 import com.mmm.clouds.service.impl.WxServiceImpl;
 import com.mmm.clouds.service.impl.WxServiceImpl.WxInfo;
+import com.mmm.clouds.utils.UserUtils;
 import com.mmm.clouds.utils.WxUtils;
 
 import net.sf.json.JSONObject;
@@ -73,7 +74,7 @@ public class WXController extends SuperController {
 	/**
 	 * 将内容ID打包成符合微信页面授权要求的格式
 	 * @param userContentId
-	 * @param spreadCid 分享（传播者id);
+	 * @param spreadCid 分享（传播者id);,如果是-
 	 * @param userId 加密了的用户id;
 	 * @return 
 	 */
@@ -81,8 +82,15 @@ public class WXController extends SuperController {
 	@ResponseBody
 	public String packToWxUrl(long userContentId,long spreadCid,String spreadNick,short spreadDeep)throws Exception{
 		//TODO:根据用户内容ID，获得用户id;
-		UserContent uc=userContentService.getById(userContentId);
-		int userId=uc.getUserId();
+		Map<String,Object> userInfo=null;
+		if(spreadCid==-1){
+			UserContent uc=userContentService.getById(userContentId);
+			int userId=uc.getUserId();
+			String userStr=AESOperator.encrypt(userId+"");
+			userInfo=UserUtils.getCurrentUserFromCache(userStr, cache);
+			spreadNick=(String)userInfo.get("name");
+		}
+		
 		String url=wxService.packUrl(spreadCid,spreadNick,userContentId,spreadDeep, super.host,super.port,super.context);
 		return WebUtils.responseData(url);
 	}
